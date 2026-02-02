@@ -43,6 +43,17 @@
     ]
   },
   {
+    "objectID": "tt/2026-01-29.html",
+    "href": "tt/2026-01-29.html",
+    "title": "HW1",
+    "section": "",
+    "text": "How does the company size affect the stock of a company? distribution of stock across comnpany sizes\n\nCodelibrary(tidyverse)\ncompanies &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/companies.csv')\nlegal_nature &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/legal_nature.csv')\nqualifications &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/qualifications.csv')\nsize &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/size.csv')\n\n\n\nCodehead(companies, 10)\n\n# A tibble: 10 × 6\n   company_id company_name        legal_nature owner_qualification capital_stock\n        &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;        &lt;chr&gt;                       &lt;dbl&gt;\n 1   41273639 MH MATERIAIS DE CO… Limited Lia… Managing Partner /…       1000000\n 2   41274138 CLINICA ESTETICA C… Limited Lia… Managing Partner /…        200000\n 3   41274505 G P CONSTRUCOES E … Limited Lia… Managing Partner /…        500000\n 4   41274745 UNICREDIT BANK SAO… Limited Lia… Managing Partner /…        159600\n 5   41274856 PRODUCON PRODUTOS … Limited Lia… Managing Partner /…        200000\n 6   41274914 HSG DISTRIBUIDORA … Limited Lia… Managing Partner /…        300000\n 7   41275001 ADA PRO IMPORTACOE… Limited Lia… Managing Partner /…       1000000\n 8   41276018 EDMILSON DE SOUZA … Limited Lia… Managing Partner /…        800000\n 9   41276085 META INVESTIMENTOS… Limited Lia… Managing Partner /…        393300\n10   41276090 BULTRINS COMERCIO … Limited Lia… Managing Partner /…        300000\n# ℹ 1 more variable: company_size &lt;chr&gt;\n\nCodeunique(companies$company_size)\n\n[1] \"small-enterprise\" \"micro-enterprise\" \"other\"           \n\n\n\nCodestock_data &lt;- companies |&gt;\n  group_by(company_size) |&gt;\n  summarise(\n    capital_stock_by_company = sum(capital_stock)\n  )\n\nstock_data\n\n# A tibble: 3 × 2\n  company_size     capital_stock_by_company\n  &lt;chr&gt;                               &lt;dbl&gt;\n1 micro-enterprise                  1.41e12\n2 other                             2.13e13\n3 small-enterprise                  2.73e13\n\n\nLook at the distributon of stock, look at the distribution across companies\n\nCodeggplot(stock_data, aes(x = company_size, y = capital_stock_by_company, fill = company_size))+ geom_col() + scale_fill_brewer(palette = \"Set2\") +\n  labs(\n    title = \"Total Capital Stock by Company Size \",\n    subtitle = \"Source: Tidy Tuesday 2026-01-27\",\n    x = \"Size of Company\", y = \"Declared share capital\",\n    fill = \"Company Size\"\n  ) \n\n\n\n\n\n\nCode## remove the legend \n## not subtitle, move caption to the bottom , labs layer, subtitle summarize the findings \n## add a sentence sumamrising whats going on",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW1</span>"
+    ]
+  },
+  {
     "objectID": "pcl/pcl.html",
     "href": "pcl/pcl.html",
     "title": "Pre-Class Learning Summaries",
@@ -50,7 +61,7 @@
     "text": "R",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -61,7 +72,7 @@
     "text": "Quarto\n\n\n\nfrom qmd4sci.njtierney.com",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -72,7 +83,7 @@
     "text": "Add content here",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>ICA Sample 1</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>ICA Sample 1</span>"
     ]
   },
   {
@@ -83,7 +94,7 @@
     "text": "Add content here",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>ICA Sample 2</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>ICA Sample 2</span>"
     ]
   },
   {
@@ -94,7 +105,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extra Sample 1</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extra Sample 1</span>"
     ]
   },
   {
@@ -105,7 +116,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extra Sample 2</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Extra Sample 2</span>"
     ]
   }
 ]
