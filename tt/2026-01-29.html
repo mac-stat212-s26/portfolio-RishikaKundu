@@ -297,13 +297,14 @@ cookieconsent.run({
   
 
 
-</header><p>How does the company size affect the stock of a company? distribution of stock across comnpany sizes</p>
+</header><p>How does total declared share capital stock vary by company size?</p>
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>companies <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/companies.csv'</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>legal_nature <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/legal_nature.csv'</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a>qualifications <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/qualifications.csv'</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a>size <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/size.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>companies <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/companies.csv'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>legal_nature <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/legal_nature.csv'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>qualifications <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/qualifications.csv'</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>size <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/size.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -334,38 +335,25 @@ cookieconsent.run({
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">|&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">summarise</span>(</span>
 <span id="cb6-4"><a href="#cb6-4"></a>    <span class="at">capital_stock_by_company =</span> <span class="fu">sum</span>(capital_stock)</span>
-<span id="cb6-5"><a href="#cb6-5"></a>  )</span>
-<span id="cb6-6"><a href="#cb6-6"></a></span>
-<span id="cb6-7"><a href="#cb6-7"></a>stock_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-  company_size     capital_stock_by_company
-  &lt;chr&gt;                               &lt;dbl&gt;
-1 micro-enterprise                  1.41e12
-2 other                             2.13e13
-3 small-enterprise                  2.73e13</code></pre>
+<span id="cb6-5"><a href="#cb6-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
-</div>
-<p>Look at the distributon of stock, look at the distribution across companies</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">ggplot</span>(stock_data, <span class="fu">aes</span>(<span class="at">x =</span> company_size, <span class="at">y =</span> capital_stock_by_company, <span class="at">fill =</span> company_size))<span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">labs</span>(</span>
-<span id="cb8-3"><a href="#cb8-3"></a>    <span class="at">title =</span> <span class="st">"Total Capital Stock by Company Size "</span>,</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    <span class="at">subtitle =</span> <span class="st">"Source: Tidy Tuesday 2026-01-27"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5"></a>    <span class="at">x =</span> <span class="st">"Size of Company"</span>, <span class="at">y =</span> <span class="st">"Declared share capital"</span>,</span>
-<span id="cb8-6"><a href="#cb8-6"></a>    <span class="at">fill =</span> <span class="st">"Company Size"</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggplot</span>(stock_data, <span class="fu">aes</span>(<span class="at">x =</span> company_size, <span class="at">y =</span> capital_stock_by_company, <span class="at">fill =</span> company_size))<span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="at">title =</span> <span class="st">"Total Capital Stock by Company Size "</span>,</span>
+<span id="cb7-4"><a href="#cb7-4"></a>    <span class="at">caption =</span> <span class="st">"Tidy Tuesday 2026-01-27 by Rishika Kundu"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="at">x =</span> <span class="st">"Size of Company"</span>, <span class="at">y =</span> <span class="st">"Declared Share Capital (trillions)"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6"></a>    <span class="at">fill =</span> <span class="st">"Company Size"</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>  ) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">scale =</span> <span class="fl">1e-12</span>, <span class="at">suffix =</span> <span class="st">"T"</span>)) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="2026-01-29_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="do">## remove the legend </span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="do">## not subtitle, move caption to the bottom , labs layer, subtitle summarize the findings </span></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="do">## add a sentence sumamrising whats going on </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
+<p>Small enterprises hold the largest share of declared capital, followed by other firms, while micro enterprises hold substantially less.</p>
 
 
 <!-- -->
@@ -998,58 +986,53 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">---</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="an">title:</span><span class="co"> "HW1"</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="an">author:</span><span class="co"> "Rishika Kundu"</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="an">date:</span><span class="co"> "2026-01-30"</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="an">output:</span><span class="co"> html_document</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">---</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="in">```{r setup, include=FALSE}</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="in">knitr::opts_chunk$set(echo = TRUE)</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="in">```</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a></span>
-<span id="cb10-12"><a href="#cb10-12"></a>How does the company size affect the stock of a company?</span>
-<span id="cb10-13"><a href="#cb10-13"></a>distribution of stock across comnpany sizes </span>
-<span id="cb10-14"><a href="#cb10-14"></a></span>
-<span id="cb10-17"><a href="#cb10-17"></a><span class="in">```{r}</span></span>
-<span id="cb10-18"><a href="#cb10-18"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb10-19"><a href="#cb10-19"></a>companies <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/companies.csv'</span>)</span>
-<span id="cb10-20"><a href="#cb10-20"></a>legal_nature <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/legal_nature.csv'</span>)</span>
-<span id="cb10-21"><a href="#cb10-21"></a>qualifications <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/qualifications.csv'</span>)</span>
-<span id="cb10-22"><a href="#cb10-22"></a>size <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/size.csv'</span>)</span>
-<span id="cb10-23"><a href="#cb10-23"></a><span class="in">```</span></span>
-<span id="cb10-26"><a href="#cb10-26"></a><span class="in">```{r}</span></span>
-<span id="cb10-27"><a href="#cb10-27"></a><span class="fu">head</span>(companies, <span class="dv">10</span>)</span>
-<span id="cb10-28"><a href="#cb10-28"></a><span class="fu">unique</span>(companies<span class="sc">$</span>company_size)</span>
-<span id="cb10-29"><a href="#cb10-29"></a><span class="in">```</span></span>
-<span id="cb10-32"><a href="#cb10-32"></a><span class="in">```{r}</span></span>
-<span id="cb10-33"><a href="#cb10-33"></a>stock_data <span class="ot">&lt;-</span> companies <span class="sc">|&gt;</span></span>
-<span id="cb10-34"><a href="#cb10-34"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">|&gt;</span></span>
-<span id="cb10-35"><a href="#cb10-35"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb10-36"><a href="#cb10-36"></a>    <span class="at">capital_stock_by_company =</span> <span class="fu">sum</span>(capital_stock)</span>
-<span id="cb10-37"><a href="#cb10-37"></a>  )</span>
-<span id="cb10-38"><a href="#cb10-38"></a></span>
-<span id="cb10-39"><a href="#cb10-39"></a>stock_data</span>
-<span id="cb10-40"><a href="#cb10-40"></a><span class="in">```</span></span>
-<span id="cb10-41"><a href="#cb10-41"></a></span>
-<span id="cb10-42"><a href="#cb10-42"></a>Look at the distributon of stock, look at the distribution across companies </span>
-<span id="cb10-43"><a href="#cb10-43"></a></span>
-<span id="cb10-44"><a href="#cb10-44"></a></span>
-<span id="cb10-47"><a href="#cb10-47"></a><span class="in">```{r}</span></span>
-<span id="cb10-48"><a href="#cb10-48"></a><span class="fu">ggplot</span>(stock_data, <span class="fu">aes</span>(<span class="at">x =</span> company_size, <span class="at">y =</span> capital_stock_by_company, <span class="at">fill =</span> company_size))<span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
-<span id="cb10-49"><a href="#cb10-49"></a>  <span class="fu">labs</span>(</span>
-<span id="cb10-50"><a href="#cb10-50"></a>    <span class="at">title =</span> <span class="st">"Total Capital Stock by Company Size "</span>,</span>
-<span id="cb10-51"><a href="#cb10-51"></a>    <span class="at">subtitle =</span> <span class="st">"Source: Tidy Tuesday 2026-01-27"</span>,</span>
-<span id="cb10-52"><a href="#cb10-52"></a>    <span class="at">x =</span> <span class="st">"Size of Company"</span>, <span class="at">y =</span> <span class="st">"Declared share capital"</span>,</span>
-<span id="cb10-53"><a href="#cb10-53"></a>    <span class="at">fill =</span> <span class="st">"Company Size"</span></span>
-<span id="cb10-54"><a href="#cb10-54"></a>  ) </span>
-<span id="cb10-55"><a href="#cb10-55"></a></span>
-<span id="cb10-56"><a href="#cb10-56"></a><span class="do">## remove the legend </span></span>
-<span id="cb10-57"><a href="#cb10-57"></a><span class="do">## not subtitle, move caption to the bottom , labs layer, subtitle summarize the findings </span></span>
-<span id="cb10-58"><a href="#cb10-58"></a><span class="do">## add a sentence sumamrising whats going on </span></span>
-<span id="cb10-59"><a href="#cb10-59"></a></span>
-<span id="cb10-60"><a href="#cb10-60"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">---</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="an">title:</span><span class="co"> "HW1"</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="an">author:</span><span class="co"> "Rishika Kundu"</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="an">date:</span><span class="co"> "2026-01-30"</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="an">output:</span><span class="co"> html_document</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">---</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="in">```{r setup, include=FALSE}</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="in">knitr::opts_chunk$set(echo = TRUE)</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="in">```</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a></span>
+<span id="cb8-12"><a href="#cb8-12"></a>How does total declared share capital stock vary by company size? </span>
+<span id="cb8-13"><a href="#cb8-13"></a></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="in">```{r}</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="fu">library</span>(scales)</span>
+<span id="cb8-19"><a href="#cb8-19"></a>companies <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/companies.csv'</span>)</span>
+<span id="cb8-20"><a href="#cb8-20"></a>legal_nature <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/legal_nature.csv'</span>)</span>
+<span id="cb8-21"><a href="#cb8-21"></a>qualifications <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/qualifications.csv'</span>)</span>
+<span id="cb8-22"><a href="#cb8-22"></a>size <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/size.csv'</span>)</span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="in">```</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="in">```{r}</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="fu">head</span>(companies, <span class="dv">10</span>)</span>
+<span id="cb8-28"><a href="#cb8-28"></a><span class="fu">unique</span>(companies<span class="sc">$</span>company_size)</span>
+<span id="cb8-29"><a href="#cb8-29"></a><span class="in">```</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a><span class="in">```{r}</span></span>
+<span id="cb8-33"><a href="#cb8-33"></a>stock_data <span class="ot">&lt;-</span> companies <span class="sc">|&gt;</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">|&gt;</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb8-36"><a href="#cb8-36"></a>    <span class="at">capital_stock_by_company =</span> <span class="fu">sum</span>(capital_stock)</span>
+<span id="cb8-37"><a href="#cb8-37"></a>  )</span>
+<span id="cb8-38"><a href="#cb8-38"></a><span class="in">```</span></span>
+<span id="cb8-39"><a href="#cb8-39"></a></span>
+<span id="cb8-40"><a href="#cb8-40"></a></span>
+<span id="cb8-41"><a href="#cb8-41"></a></span>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="in">```{r}</span></span>
+<span id="cb8-45"><a href="#cb8-45"></a><span class="fu">ggplot</span>(stock_data, <span class="fu">aes</span>(<span class="at">x =</span> company_size, <span class="at">y =</span> capital_stock_by_company, <span class="at">fill =</span> company_size))<span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb8-46"><a href="#cb8-46"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-47"><a href="#cb8-47"></a>    <span class="at">title =</span> <span class="st">"Total Capital Stock by Company Size "</span>,</span>
+<span id="cb8-48"><a href="#cb8-48"></a>    <span class="at">caption =</span> <span class="st">"Tidy Tuesday 2026-01-27 by Rishika Kundu"</span>,</span>
+<span id="cb8-49"><a href="#cb8-49"></a>    <span class="at">x =</span> <span class="st">"Size of Company"</span>, <span class="at">y =</span> <span class="st">"Declared Share Capital (trillions)"</span>,</span>
+<span id="cb8-50"><a href="#cb8-50"></a>    <span class="at">fill =</span> <span class="st">"Company Size"</span></span>
+<span id="cb8-51"><a href="#cb8-51"></a>  ) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">scale =</span> <span class="fl">1e-12</span>, <span class="at">suffix =</span> <span class="st">"T"</span>)) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb8-52"><a href="#cb8-52"></a></span>
+<span id="cb8-53"><a href="#cb8-53"></a><span class="in">```</span></span>
+<span id="cb8-54"><a href="#cb8-54"></a></span>
+<span id="cb8-55"><a href="#cb8-55"></a>Small enterprises hold the largest share of declared capital, followed by other firms, while micro enterprises hold substantially less.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
