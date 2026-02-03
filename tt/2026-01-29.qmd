@@ -1,0 +1,47 @@
+---
+title: "HW1"
+author: "Rishika Kundu"
+date: "2026-01-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+How does total declared share capital stock vary by company size? 
+
+```{r}
+library(tidyverse)
+library(scales)
+companies <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/companies.csv')
+legal_nature <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/legal_nature.csv')
+qualifications <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/qualifications.csv')
+size <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-27/size.csv')
+```
+```{r}
+head(companies, 10)
+unique(companies$company_size)
+```
+```{r}
+stock_data <- companies |>
+  group_by(company_size) |>
+  summarise(
+    capital_stock_by_company = sum(capital_stock)
+  )
+```
+
+
+
+```{r}
+ggplot(stock_data, aes(x = company_size, y = capital_stock_by_company, fill = company_size))+ geom_col() + scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Total Capital Stock by Company Size ",
+    caption = "Tidy Tuesday 2026-01-27 by Rishika Kundu",
+    x = "Size of Company", y = "Declared Share Capital (trillions)",
+    fill = "Company Size"
+  ) + scale_y_continuous(labels = label_number(scale = 1e-12, suffix = "T")) + theme(legend.position = "none")
+
+```
+
+Small enterprises hold the largest share of declared capital, followed by other firms, while micro enterprises hold substantially less.
