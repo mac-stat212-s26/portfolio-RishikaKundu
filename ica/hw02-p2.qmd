@@ -1,0 +1,144 @@
+---
+title: "HW02-P2 Adv Data Viz"
+---
+
+## Instructions
+
+**Task:** Open up the New York Times article [A Summer of Strikes](https://www.nytimes.com/interactive/2023/09/03/business/economy/strikes-union-sag-uaw.html), and scroll down to the plot titled "Union membership has fallen sharply over the past four decades (Share of the work force in a union, by industry)".
+
+![](https://hash-mac.github.io/stat212site-sp26/images/challenge-2-goal.png)
+
+Using `ggplot2` and other tools in R, recreate this plot. Note that you will need to create the data underlying the plot yourself. You can create this data in R with `tibble()`. You can also write the data in Excel or Google Sheets and export it as a CSV file.
+
+**Requirements:**
+
+- Overall
+  - Panels for "All workers", "By Sector", and "By Industry" are shown.
+  - Arrows showing the change from 1983 to 2022 are shown.
+    - Note: be sure that the arrows all point in the correct direction!
+  - The actual percentages in 1983 and 2022 are shown as text.
+  - X-axis tick marks are at 0, 25, and 50.
+  - Plot title says "Union membership has fallen sharply over the past four decades".
+  - Plot subtitle says "Share of the work force in a union, by industry".
+- Resource reflection
+    - At least 1 resource is listed
+    - At least 3 sentences about resources and their helpfulness in the task
+
+**Bonus**: Additional possibilities to enhance your visualization include adjusting the default aesthetics of the arrows, aligning your plots neatly, and adding margins in order to left-align the y-axis text. 
+
+
+
+
+
+## Setup
+
+```{r}
+# Code for loading packages
+# And code for reading in data if using the Excel/Google Sheets-->CSV approach
+library(tidyverse)
+
+```
+
+```{r}
+# Code for generating the data (if using the tibble() approach)
+union_df <- tibble( section = c(rep("All workers", 1), rep("By sector", 2), rep("By industry", 10)), 
+             category = c("All workers", "Private sector", "Public sector", "Transportation and utilities", "Manufacturing", "Mining", "Construction", "Education and health", "Arts, entertainment and recreation", "Business services", "Retail, food and hospitality", "Public administration", "Agriculture"), 
+             `1983` = c(20, 17, 37, 47, 28, 27, 28, 26, 17, 10, 8, 30, 5), 
+             `2022` = c(10,  6, 33, 16,  8,  7, 13, 17,  7,  3, 3, 28, 4))
+```
+
+
+
+
+## Visualization
+
+```{r}
+# cleaning the data:
+
+union_df <- union_df %>%
+  mutate(
+    label_1983 = if_else(section == "All workers", paste0(`1983`, "%"), as.character(`1983`)),
+    label_2022 = if_else(section == "All workers", paste0(`2022`, "%"), as.character(`2022`)),
+    section = factor(section,
+                     levels = c("All workers",
+                                "By sector",
+                                "By industry")),
+    category = factor(
+      category,
+      levels = c(
+        "All workers",
+        "Private sector",
+        "Public sector",
+        "Transportation and utilities",
+        "Manufacturing",
+        "Mining",
+        "Construction",
+        "Education and health",
+        "Arts, entertainment and recreation",
+        "Business services",
+        "Retail, food and hospitality",
+        "Public administration",
+        "Agriculture"
+      )
+    )
+  )
+
+union_main <- union_df2 %>% filter(category != "Agriculture")
+union_ag   <- union_df2 %>% filter(category == "Agriculture")
+```
+
+
+```{r}
+
+# code for the viz:
+ggplot(union_df, aes(y = fct_rev(category))) +
+  facet_grid(rows = vars(section), scales = "free_y", space = "free_y", switch = "y") + 
+  geom_segment( data = union_main, aes(x = `1983`, xend = `2022`, yend = fct_rev(category)), linewidth = 0.5 , color = '#00008B', arrow = arrow(type = "open", length = unit(0.07, "inches"),ends = "last",)
+  ) + 
+  geom_segment( data = union_ag, aes(y = fct_rev(category), yend = fct_rev(category), x = `2022`, xend = `1983`), linewidth = 0.5 , color = '#00008B', arrow = arrow(type = "open", length = unit(0.07, "inches"),ends = "last",)
+  ) + 
+geom_text(
+  aes(x = `2022`, y = fct_rev(category), label = label_2022),
+  hjust = 1.15, fontface = "bold", size = 4
+) + geom_text(
+  aes(x = `1983`, y = fct_rev(category), label = label_1983),
+  hjust = -0.15, fontface = "bold", size = 4
+) +
+  scale_x_continuous(limits = c(0, 50), breaks = c(0, 25, 50), labels = c("0", "25", "50")
+  ) + labs( title = "Union membership has fallen sharply over the past four decades", subtitle = "Share of the work force in a union, by industry", x = NULL, y = NULL,caption = "Source: Current Population Survey, via unionstats.com  * By The New York Times"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.y = element_line(linewidth = 0.3, color = "grey90"),
+    strip.placement = "outside",
+    strip.text.y.left = element_text(face = "bold", size = 11),
+    axis.text.y = element_text(size = 11),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    plot.title = element_text(face = "bold", size = 15, hjust = 0),
+    plot.subtitle = element_text(size = 11, color = "grey35", hjust = 0),
+    plot.caption = element_text(size = 9, color = "grey40", hjust = 0),
+  )
+```
+
+
+
+
+## Resources Reflection (required)
+
+List the resources you used to help with this assignment then write 3-5 sentence reflection on which resources were most helpful in finishing this task.
+
+**Resources:**
+
+- R for Data Science (2e)
+- Stack Overflow
+- Class Notes
+
+**Reflection:**
+
+A combination of all resoucres was helpful. However, the easiest and fastest to use resource is generally StackOverflow because it has specfic answers by programmers who have faced the same issue before. The book is more relaible but sometimes hard to search for answers. 
+
+
+
+
+
