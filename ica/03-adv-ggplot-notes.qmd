@@ -1,5 +1,8 @@
 ---
 title: "3 Adv Data Viz"
+format:
+  html:
+    embed-resources: true
 ---
 
 
