@@ -1,0 +1,49 @@
+---
+title: "Homework 02"
+format: 
+  html: 
+    embed-resources: true
+---
+
+
+## TidyTuesday Section (optional)
+
+::: {.callout-important title="Instructions"}
+
+You can count work on this week's TidyTuesday toward the exceptional work required for an A in the Homework component.
+
+:::
+
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story with [effective visualization(s)]({{< var effective-viz-url >}}).  Provide sufficient background for readers to grasp your narrative.
+
+Does minimum preferred soil pH vary across nutrient requirement groups in edible plants?
+
+```{r}
+edible_plants <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-02-03/edible_plants.csv')
+
+library(tidyverse)
+```
+
+
+```{r}
+edible_plants_1 <- edible_plants |>
+  mutate(water = factor(water, levels = c("Very Low", "Low", "Medium", "High", "Very High")))
+
+edible_plants_1 <- edible_plants |>
+  mutate(nutrients = tools::toTitleCase(tolower(nutrients)))
+
+```
+
+```{r}
+edible_plants_1 |>
+  ggplot(aes(x = preferred_ph_lower, fill = nutrients)) +
+  geom_density(alpha = 0.2)+ labs(
+  title = "Minimum Preferred Soil pH by Nutrient Requirement",
+  caption = "Source: Edible Plants Dataset Tidy Tuesday Visualization by Rishika Kundu",
+  x = "Minimum Preferred Soil pH",
+  fill = "Nutrient Requirement"
+)
+```
+
+Across all the different nutrient categories, the strongest density peak is near 5.5 and 6.0. The pattern remains relatively same across all the different nutrient groups. This suggests that the central tendancy of preferred lower ph does not drastically change based on nutrient group. 
